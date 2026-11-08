@@ -19,8 +19,8 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - uses: ilammy/msvc-dev-cmd@v1
@@ -31,7 +31,7 @@ jobs:
           python -I tools\asm.py asm\starfox.s build\starfox.sfc build\ir.json || exit /b 1
           python -I tools\recomp.py build\ir.json build\gen || exit /b 1
           call build.bat || exit /b 1
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: arwing-windows
           path: build/arwing.exe
@@ -41,12 +41,12 @@ jobs:
     env:
       SDL_VERSION: 2.30.11
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - id: sdl-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: build/sdl
           key: sdl-${{ env.SDL_VERSION }}-universal-11.0
@@ -102,12 +102,12 @@ jobs:
           kill $p
           rm -rf "/Applications/Project Arwing.app" "$HOME/Library/Application Support/Project Arwing"
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: uitest-macos
           path: build/ut_*.png
           if-no-files-found: ignore
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: arwing-macos
           path: build/arwing-macos.dmg
@@ -133,7 +133,7 @@ jobs:
       SDL_VERSION: 2.30.11
       FT_VERSION: 2.13.3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: packages
         run: |
           sudo apt-get update
@@ -143,7 +143,7 @@ jobs:
             libasound2-dev libpulse-dev libpipewire-0.3-dev libudev-dev libdbus-1-dev \
             fonts-dejavu-core fonts-dejavu-extra xvfb xdotool imagemagick desktop-file-utils libgl1-mesa-dri
       - id: deps-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             build/sdl
@@ -254,12 +254,12 @@ jobs:
           test ! -e "$HOME/.local/share/icons/hicolor/256x256/apps/project-arwing.png"
           test -f "$data/starfox.sfc"
       - if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: uitest-linux-${{ matrix.arch }}
           path: build/ut_*.png
           if-no-files-found: ignore
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: arwing-linux-${{ matrix.arch }}
           path: build/${{ matrix.file }}
@@ -269,8 +269,8 @@ jobs:
     if: always() && github.ref == 'refs/heads/main' && needs.windows.result == 'success'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
         with:
           path: dist
           merge-multiple: true
